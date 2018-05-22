@@ -6,20 +6,34 @@ fun main(args: Array<String>) {
     println("Use simpleJSON.Create dsl to create an object and")
     val testIn =
             simpleJSON.Create { // using constructor syntax
-                "name"    be "simpleJSON lib for Kotlin-JS"
-                "version" be 1.0
-                "date"    be "2018-05-15"
+                "name"    map "simpleJSON lib for Kotlin-JS"
+                "version" map 1.0
+                "date"    map "2018-05-15"
 
                 // nested objects are possible
-                "author" be simpleJSON.Create {
-                    "name"       be "Tom"
-                    "surname"    be "Schröter"
-                    "profession" be "developer"
+                "author" map simpleJSON.Create {
+                    "name"       map "Tom"
+                    "surname"    map "Schröter"
+                    "profession" map "developer"
+                }
+
+                // arrays are supported via list constructor
+                "myList1" map simpleJSON.List { list -> //with optional named arg
+                    list add "This"
+                    list += "is"
+                    add ("a")
+                    add ("list")
+                }
+
+                // or simply map a new list...
+                "myList2" map list {
+                    add ("List Item 1")
+                    this += "List item 2"
                 }
             }
 
     // you may add more objects anytime
-    testIn += { "note" be "Please note, that the elements in the resulting string are unsorted!"}
+    testIn += { "note" map "Please note, that the elements in the resulting string are unsorted!"}
 
     println("output as JSON string:\n")
     println(testIn)

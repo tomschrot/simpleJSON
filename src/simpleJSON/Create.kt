@@ -18,15 +18,16 @@ class Create() {
     val asString: String
         get() = toString()
     //-------------------------------------------------------------------------
-    constructor(block: Context): this() {
-        block()
-    }
+    constructor(block: Context): this() { block() }
     //-------------------------------------------------------------------------
-    infix fun <T> String.be(value: T) =
+    infix fun <T> String.map(value: T) =
             _map.put(this, value)
     //-------------------------------------------------------------------------
     operator fun plusAssign(block: Context) =
             block()
+    //-------------------------------------------------------------------------
+    infix fun list(block: List.() -> Unit): List =
+        List().apply { block() }
     //-------------------------------------------------------------------------
     override fun toString(): String =
             StringBuilder().apply {
@@ -36,12 +37,24 @@ class Create() {
                     append("\"")
                     append(n.key)
                     append("\":")
-                    if(n.value !is Create) {
-                        append("\"")
-                        append(n.value.toString())
-                        append("\"")
+
+                    when(n.value) {
+                        is List,
+                        is Create -> append(n.value.toString())
+                        else      -> {
+                            append("\"")
+                            append(n.value.toString())
+                            append("\"")
+                        }
                     }
-                    else append(n.value.toString())
+
+//                    if(n.value !is Create) {
+//                        append("\"")
+//                        append(n.value.toString())
+//                        append("\"")
+//                    }
+//                    else append(n.value.toString())
+
                     if(++count < _map.size)
                         append(", ")
                 }
