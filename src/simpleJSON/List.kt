@@ -1,6 +1,30 @@
 package simpleJSON
 
-class List() {
+internal interface Builder {
+
+    fun asString(open: Char, close: Char): String =
+        StringBuilder().apply {
+            append(open)
+            iterateItems(this)
+            append(close)
+        }.toString()
+
+    fun iterateItems(sb: StringBuilder)
+
+    fun appendItem(item: Any?, sb: StringBuilder) {
+        when(item) {
+            is List,
+            is Create -> sb.append(item.toString())
+            else -> {
+                sb.append("\"")
+                sb.append(item.toString())
+                sb.append("\"")
+            }
+        }
+    }
+}
+
+class List(): Builder {
     //-------------------------------------------------------------------------
     private val _list = ParsedList()
     //-------------------------------------------------------------------------
@@ -12,8 +36,21 @@ class List() {
     operator fun <T> plusAssign(value: T) {
         _list.add(value)
     }
-    //-------------------------------------------------------------------------
-    override fun toString(): String =
+
+    override fun toString(): String {
+        return asString('[', ']')
+    }
+
+    override fun iterateItems(sb: StringBuilder) {
+        var count = 0
+        _list.forEach { item ->
+            appendItem(item, sb)
+            if(++count < _list.count())
+                sb.append(", ")
+        }
+    }
+
+     fun toStringxx(): String =
             StringBuilder().apply {
                 var count = 0
                 append("[")

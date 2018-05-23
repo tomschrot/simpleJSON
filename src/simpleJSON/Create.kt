@@ -11,7 +11,7 @@ private typealias Context = Create.() -> Unit
  * @author Tom Schröter
  *
  */
-class Create() {
+class Create(): Builder {
     //-------------------------------------------------------------------------
     private val _map = ParsedMap()
     //-------------------------------------------------------------------------
@@ -29,31 +29,35 @@ class Create() {
     infix fun list(block: List.() -> Unit): List =
         List().apply { block() }
     //-------------------------------------------------------------------------
+    override fun iterateItems(sb: StringBuilder) {
+        var count = 0
+        _map.forEach { item ->
+            appendItem(item.value, sb)
+            if(++count < _map.size)
+                sb.append(", ")
+        }
+    }
+
+    //-------------------------------------------------------------------------
     override fun toString(): String =
             StringBuilder().apply {
                 var count = 0
                 append("{")
-                for (n in _map) {
+
+                _map.forEach{ item ->
                     append("\"")
-                    append(n.key)
+                    append(item.key)
                     append("\":")
 
-                    when(n.value) {
+                    when(item.value) {
                         is List,
-                        is Create -> append(n.value.toString())
+                        is Create -> append(item.value.toString())
                         else      -> {
                             append("\"")
-                            append(n.value.toString())
+                            append(item.value.toString())
                             append("\"")
                         }
                     }
-
-//                    if(n.value !is Create) {
-//                        append("\"")
-//                        append(n.value.toString())
-//                        append("\"")
-//                    }
-//                    else append(n.value.toString())
 
                     if(++count < _map.size)
                         append(", ")
