@@ -3,20 +3,6 @@ package simpleJSON
 typealias ParsedMap  = HashMap<String, Any?>
 typealias ParsedList = ArrayList<Any?>
 //-------------------------------------------------------------------------
-fun ParsedMap.iter(action: (item: Any?) -> Unit) {
-   forEach { item ->
-       action(item.value)
-   }
-}
-
-fun ParsedList.iter(action: (item: Any?) -> Unit) {
-    forEach { item ->
-        action(item)
-    }
-}
-
-
-//-------------------------------------------------------------------------
 @Suppress("UNCHECKED_CAST")
 fun asMap(obj: Any?, block: ParsedMap.() -> Unit) =
         asType(obj, block)

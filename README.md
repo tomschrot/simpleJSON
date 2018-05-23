@@ -4,11 +4,11 @@ Usage of simpleJSON package
 Use simpleJSON.Create dsl to create an object and
 output as JSON string:
 
-{"date":"2018-05-15", "note":"Please note, that the elements in the resulting string are unsorted!", "author":{"profession":"developer", "surname":"Schröter", "name":"Tom"}, "name":"simpleJSON lib for Kotlin-JS", "version":"1.0"}
+{"date":"2018-05-15", "note":"Please note, that the elements in the resulting string are unsorted!", "myList1":["This", "is", "a", "list"], "author":{"profession":"developer", "surname":"Schröter", "name":"Tom"}, "name":"simpleJSON lib for Kotlin-JS", "myList2":["List Item 1", "List item 2"], "version":"1.0"}
 
 The JSON string is converted into a Kotlin HashMap:
 
-{date=2018-05-15, note=Please note, that the elements in the resulting string are unsorted!, author={profession=developer, surname=Schröter, name=Tom}, name=simpleJSON lib for Kotlin-JS, version=1.0}
+{date=2018-05-15, note=Please note, that the elements in the resulting string are unsorted!, myList1=[This, is, a, list], author={profession=developer, surname=Schröter, name=Tom}, name=simpleJSON lib for Kotlin-JS, myList2=[List Item 1, List item 2], version=1.0}
 
 You can access the elements, e.g.:
 

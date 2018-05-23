@@ -11,7 +11,7 @@ private typealias Context = Create.() -> Unit
  * @author Tom Schröter
  *
  */
-class Create(): Builder {
+class Create(): JointString {
     //-------------------------------------------------------------------------
     private val _map = ParsedMap()
     //-------------------------------------------------------------------------
@@ -29,40 +29,22 @@ class Create(): Builder {
     infix fun list(block: List.() -> Unit): List =
         List().apply { block() }
     //-------------------------------------------------------------------------
+    override fun toString(): String {
+        return asString('{', '}')
+    }
+    //-------------------------------------------------------------------------
     override fun iterateItems(sb: StringBuilder) {
         var count = 0
         _map.forEach { item ->
+            sb.append("\"")
+            sb.append(item.key)
+            sb.append("\":")
+
             appendItem(item.value, sb)
+
             if(++count < _map.size)
                 sb.append(", ")
         }
     }
-
-    //-------------------------------------------------------------------------
-    override fun toString(): String =
-            StringBuilder().apply {
-                var count = 0
-                append("{")
-
-                _map.forEach{ item ->
-                    append("\"")
-                    append(item.key)
-                    append("\":")
-
-                    when(item.value) {
-                        is List,
-                        is Create -> append(item.value.toString())
-                        else      -> {
-                            append("\"")
-                            append(item.value.toString())
-                            append("\"")
-                        }
-                    }
-
-                    if(++count < _map.size)
-                        append(", ")
-                }
-                append("}")
-            }.toString()
     //-------------------------------------------------------------------------
 }
